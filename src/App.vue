@@ -122,8 +122,10 @@ import {onBeforeMount} from 'vue';
       this.$webSocketsDisconnect()
     },
     send(value) {
-      let d = new Date() + value;
-      this.$webSocketsSend(d);
+      let msg = JSON.parse('{"HostName": null, "command": "message", "params": null}');
+      msg.params = value;
+      this.$webSocketsSend(msg);
+      console.log('Sent UI message to WS server: ' + JSON.stringify(msg, 0, 2));
     }
    },
     onBeforeMount(){ },

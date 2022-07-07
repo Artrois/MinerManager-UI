@@ -65,9 +65,12 @@ export default {
         ws.close();  
     }
 
-    Vue.config.globalProperties.$webSocketsSend = (data) => {
+    Vue.config.globalProperties.$webSocketsSend = (value) => {
         // Send data to the backend - use JSON.stringify(data)
-        ws.send(JSON.stringify(data))
+        let dt = JSON.parse('{"time_stamp": null, "data": null}');
+        dt.time_stamp = new Date();
+        dt.data = value;
+        ws.send(JSON.stringify(dt))
     }
 
     /*

@@ -599,10 +599,16 @@ export default {
         reboot: function()
         {
             console.log('TableWhatsminer30S.vue::reboot(): not implemented yet');
+            let msg = JSON.parse('{"HostName": null, "command": "reboot", "params": null}');
+            msg.HostName = store.miner_data[this.tblIndex].HostName;
+            this.$webSocketsSend(msg);
         },
         power_off: function()
         {
             console.log('TableWhatsminer30S.vue::power_off(): not implemented yet');
+            let msg = JSON.parse('{"HostName": null, "command": "power_off", "params": null}');
+            msg.HostName = store.miner_data[this.tblIndex].HostName;
+            this.$webSocketsSend(msg);
         }
         
     }
