@@ -149,7 +149,9 @@ nav a:first-of-type {
   border: 0;
 }
 
- 
+.card{
+  background-color: #ddd;
+}
 
 @media (min-width: 1024px) {
   body {
