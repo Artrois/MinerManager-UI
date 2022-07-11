@@ -1,6 +1,6 @@
 <template>
 <!-- style/width is linked to bootstrap 5 card-body -->
-    <div ref="EchartID" style="min-height:300px;" class="w-auto p-3"></div>
+    <div ref="EchartID" style="width: 400px; min-width: 100%; height:400px;"></div>
 </template>
 
 <script>
@@ -60,6 +60,10 @@ export default {
                     };
       //Use the configuration items and data just specified to display the chart.
       myChart.setOption(option);
+      //make the chart responsive towards the container size
+      window.onresize = function() {
+            myChart.resize();
+        };
     }
   },
   mounted() {

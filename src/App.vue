@@ -2,14 +2,41 @@
 
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <header>
-    <!-- <button @click="connect()" type="button" class="btn btn-outline-secondary"  ><i title="connect" class="bi bi-arrows-angle-contract" style="color: black; cursor: pointer; -webkit-text-stroke: 2px;"></i></button>  -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <h1 class="h2">Dashboard</h1>
 
+
+<!--       <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul> -->
+  </nav>
+
+    <!-- <button @click="connect()" type="button" class="btn btn-outline-secondary"  ><i title="connect" class="bi bi-arrows-angle-contract" style="color: black; cursor: pointer; -webkit-text-stroke: 2px;"></i></button>  -->
   <div class="row">
-    <div class="d-flex bd-highlight mb-3">
+<!--     <div class="d-flex bd-highlight mb-3">
       <div class="p-2 bd-highlight">
         <h1 class="h2">Dashboard</h1>
       </div>
-    </div>
+    </div> -->
 
     <div class="w-100"></div>
 
@@ -23,15 +50,13 @@
         </button>
       </div>
       <div class="p-2 bd-highlight">
-        <button @click="send('hello')" type="button" class="btn btn-outline-secondary"  ><i title="send custom msg" class="bi bi-box-arrow-up-right" style="color: black; cursor: pointer; -webkit-text-stroke: 1px;"></i></button>
-      </div>
-      <div class="p-2 bd-highlight">
-        <button @click="store.backend_connected?store.backend_connected=false:store.backend_connected=true" type="button" class="btn btn-outline-secondary">Toggle connection: {{ store.backend_connected }}</button> 
-      </div>
-      <div class="ms-auto p-2 bd-highlight">
         <span class="text-muted text-reset">
           Last update from backend: {{ store.timestamp }}
         </span>
+      </div>
+      <div class="ms-auto p-2 bd-highlight">
+        <button @click="send('hello')" type="button" class="btn btn-outline-secondary"  ><i title="send custom msg" class="bi bi-box-arrow-up-right" style="color: black; cursor: pointer; -webkit-text-stroke: 1px;"></i></button>
+        <button @click="store.backend_connected?store.backend_connected=false:store.backend_connected=true" type="button" class="btn btn-outline-secondary">Toggle connection: {{ store.backend_connected }}</button> 
       </div>
     </div>
   </div>
@@ -75,9 +100,10 @@
       <div class="card">
           <h5 class="card-header">Miners with errors</h5>
           <div class="card-body">
-            <h5 class="card-title">64k</h5>
-            <p class="card-text">Feb 1 - Apr 1, United States</p>
-            <p class="card-text text-danger">2.5% increase since last month</p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">192.168.178.40</li>
+              <li class="list-group-item">192.168.178.44</li>
+            </ul>
           </div>
         </div>
   </div>
@@ -86,17 +112,17 @@
 <div class="row my-5">
   <div class="col-12 col-xl-8 mb-4 mb-lg-0">
       <div class="card">
-          <h5 class="card-header">Temperature, Fan out, Fan in over-threshold</h5>
+          <h5 class="card-header">Temperature, Fan-out, Fan-in over threshold</h5>
           <div class="card-body">
               <div class="table-responsive">
                   <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col">Order</th>
-                          <th scope="col">Product</th>
-                          <th scope="col">Customer</th>
-                          <th scope="col">Total</th>
-                          <th scope="col">Date</th>
+                          <th scope="col">IP</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Temp</th>
+                          <th scope="col">Fan-In</th>
+                          <th scope="col">Fan-Out</th>
                           <th scope="col"></th>
                         </tr>
                       </thead>

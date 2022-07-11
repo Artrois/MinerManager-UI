@@ -149,7 +149,7 @@ nav a:first-of-type {
   border: 0;
 }
 
-.card{
+.card, .navbar, .list-group-item{
   background-color: #ddd;
 }
 

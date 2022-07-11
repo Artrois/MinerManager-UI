@@ -80,6 +80,7 @@ export default {
         // New message from the backend - use JSON.parse(event.data)
         //console.log(params);
         let time_stamp = getDateTime();
+        let data_processed_successfully = false;
         console.log("WebSocketService.js::handleNotification(): message received " + time_stamp);
         
         {
@@ -87,6 +88,8 @@ export default {
             let tmp2 = null;
             try{
                 tmp2 = JSON.parse(params.data);
+                //check that we have at least 1 entry in the received array
+                if(tmp2.length == 0) return;
                 console.log(tmp2);
                 //if (tmp2.dirty){
                     options.store.miner_data = tmp2;
@@ -94,16 +97,21 @@ export default {
                 //}
                 options.store.backend_connected = true;
                 options.store.timestamp = time_stamp;
+                data_processed_successfully = true;
             }
             catch(error){
                 options.store.backend_message = "invalid data";
                 console.log("WebSocketService.js::handleNotification(): " + error.message);
             }
-
+            
+            //from here we collect the data for the dashboard, the bindings to the graphs/diagrams will be done in vue
+            if(data_processed_successfully)process_data_for_dashboard();
         }
 
         //options.store.dispatch('notifications/setNotifications', params.data)
     }
+
+    //returns current time in format yyyy/mm/dd hh:mm:ss
     function getDateTime() {
         var now     = new Date(); 
          var year    = now.getFullYear();
@@ -131,8 +139,52 @@ export default {
           return dateTime;
        }
 
-    Vue.config.globalProperties.$webSocketsConnect();
+       //processess current data in options.store.miner_data and stores the condensed results ready for dashboard consumption in options.store.miner_data
+       function process_data_for_dashboard(){
+            options.store.dashboard_data.total_amount_miners = options.store.miner_data.length;
+            let online_miners = 0;
+            let hashrate_5s = 0;
+            let hashrate_1m = 0;
+            let miners_with_errors = [];
+            let temp_fan_threshold_alarms = [];
+            //this part seems to be Whatsminer_M30S+ specific. We will have to put this to a more modular design to allow other miners to be addded as well
+            options.store.miner_data.forEach((miner_object, index) => { 
+                //count online miners
+                if(miner_object.isAlive) ++online_miners;
 
+                //calc 5s hashrate in Megahash
+                if(miner_object.summary !==null )hashrate_5s += miner_object.summary.SUMMARY[0]["MHS 5s"];
+
+                //calc 1m hashrate in Megahash
+                if(miner_object.summary !==null )hashrate_1m += miner_object.summary.SUMMARY[0]["MHS 1m"];
+
+                //check if current miner has errors and store its IP in an array
+                if(miner_object.error_codes !==null ) {if(miner_object.error_codes.length>0)miners_with_errors.push(miner_object.HostName);};
+
+                //check if temp and fan thresholds exceeded => miner specific
+                if(miner_object.summary !==null ) {
+
+                    let Fan_Speed_In = miner_object.summary.SUMMARY[0]["Fan Speed In"];
+                    let Fan_Speed_Out = miner_object.summary.SUMMARY[0]["Fan Speed Out"];
+                    let Temperature = miner_object.summary.SUMMARY[0]["Temperature"];
+                    let Env_Temp = miner_object.summary.SUMMARY[0]["Env Temp"];
+                    if ( (Fan_Speed_In >= miner_object.Fan_Speed_In_threshold) || (Fan_Speed_In == 0) || (Fan_Speed_Out >= miner_object.Fan_Speed_Out_threshold) || (Fan_Speed_Out == 0) || (Temperature >= miner_object.Temperature_threshold) || (Env_Temp >= miner_object.Env_Temp_threshold)){
+                        //create new item for the array
+                        let item = JSON.parse('{' + '"HostName": "' + HostName + '", "Fan_Speed_In": ' + Fan_Speed_In + ', "Fan_Speed_Out":' + Fan_Speed_Out + ', "Temperature":' + Temperature + ', "Env_Temp":' + Env_Temp + '}');
+                        temp_fan_threshold_alarms.push(item);
+                    }
+                    miners_with_errors.push(miner_object.HostName);
+                }
+            });
+            options.store.dashboard_data.online_miners = online_miners;
+            options.store.dashboard_data.total_hashr_5s = hashrate_5s;
+            options.store.dashboard_data.total_hashr_1m = hashrate_1m;
+            if(miners_with_errors.length > 0) options.store.dashboard_data.miners_with_errors = miners_with_errors;
+            if(temp_fan_threshold_alarms.lenght > 0) options.store.dashboard_data.temp_fan_threshold_alarms = temp_fan_threshold_alarms;
+       }
+
+    Vue.config.globalProperties.$webSocketsConnect();
+       
     }
 }
 

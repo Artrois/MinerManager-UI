@@ -5,6 +5,14 @@ export const store = reactive({
     backend_connected: false, 
     timestamp: "",
     backend_message: "",
+    dashboard_data: {
+      total_amount_miners: 0,
+      online_miners: 0,
+      total_hashr_5s: 0,
+      total_hasr_1m: 0,
+      miners_with_errors: null,
+      temp_fan_threshold_alarms: null
+    },
     miner_data: null,
     miner_data_bak: JSON.parse(`[
         {
@@ -13,6 +21,12 @@ export const store = reactive({
             "isAlive": false,
             "timestamp": "NaN",
             "dirty": true,
+            "expected_hashrate_MHS": 104709140,
+            "MinerModel": "Whatsminer_M30S+",
+            "Fan_Speed_In_threshold": 6000,
+            "Fan_Speed_Out_threshold": 6000,
+            "Temperature-threshold": 80,
+            "Env-Temp-threshold": 38,
             "summary": {
                 "STATUS":[{"STATUS":"S","Msg":"Summary"}],
                 "SUMMARY":[
@@ -65,6 +79,8 @@ export const store = reactive({
             "isAlive": false,
             "timestamp": "NaN",
             "dirty": true,
+            "expected_hashrate_MHS": 104709140,
+            "MinerModel": "Whatsminer_M30S+",
             "summary": null,
             "pools": null,
             "edevs": null,
