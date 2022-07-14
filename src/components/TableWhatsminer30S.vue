@@ -24,13 +24,13 @@
         <th >Uptime     </th>
         <th >Elapsed    </th>
         <th >GHS avg    </th>
+        <th>Target GHS </th>
         <th >Temp       </th>
         <th >Env Temp   </th>
         <th >Accepted   </th>
         <th >Rejected   </th>
         <th >FanSpeedIn </th>
         <th >FanSpeedOut</th>
-        <th >Voltage    </th>
         <th >Power      </th>
         <th >Power Mode </th>
         </tr>
@@ -44,13 +44,15 @@
             <!--  Summary: {{ store.miner_data[tblIndex].summary }} -->
             {{ secondsToString(accessSUMMARYelements("Elapsed")) }}
             <!-- 3d 15h 2m 49s -->
-
         </td>
 
         <td data-label="GHS avg">
-            {{ accessSUMMARYelements("MHS av")/1000 }} 
+            {{ Math.round(accessSUMMARYelements("MHS av")/1000) }} 
             <!--  104709.22 -->
 
+        </td>
+        <td data-label="Target GHS">
+            {{ Math.round(accessSUMMARYelements("Target MHS")/1000) }} 
         </td>
 
         <td data-label="Temp">
@@ -75,10 +77,6 @@
 
         <td data-label="FanSpeedOut">
             {{ accessSUMMARYelements("Fan Speed Out") }}
-        </td>
-
-        <td data-label="Voltage">
-            <p class="fst-italic">NaN</p>
         </td>
 
         <td data-label="Power">
@@ -130,23 +128,23 @@
                     {{ item["Temperature"] }}
                 </td>
                 <td data-label="GHSav">
-                    {{ item["MHS av"]/1000 }}
+                    {{ Math.round(item["MHS av"]/1000) }}
                 </td>
 
                 <td data-label="GHS5s">
-                    {{ item["MHS 5s"]/1000 }}
+                    {{ Math.round(item["MHS 5s"]/1000) }}
                 </td>
 
                 <td data-label="GHS1m">
-                    {{ item["MHS 1m"]/1000 }}
+                    {{ Math.round(item["MHS 1m"]/1000) }}
                 </td>
 
                 <td data-label="GHS5m">
-                    {{ item["MHS 5m"]/1000 }}
+                    {{ Math.round(item["MHS 5m"]/1000) }}
                 </td>
 
                 <td data-label="GHS15m">
-                    {{ item["MHS 15m"]/1000 }}
+                    {{ Math.round(item["MHS 15m"]/1000) }}
                 </td>
             </tr>
             <tr v-else>
