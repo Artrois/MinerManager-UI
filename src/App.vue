@@ -2,7 +2,7 @@
 
  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <header>
-  <nav class="navbar navbar-expand-lg navbar-light">
+  <nav class="navbar navbar-expand-lg navbar-light rounded-pill border border-4">
     <h1 class="h2">Dashboard</h1>
 
 
