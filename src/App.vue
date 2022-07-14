@@ -67,9 +67,6 @@
       <div class="card">
           <h5 class="card-header">Online miners</h5>
           <div class="card-body">
-<!--             <h5 class="card-title">345k</h5>
-            <p class="card-text">Feb 1 - Apr 1, United States</p>
-            <p class="card-text text-success">18.2% increase since last month</p> -->
             <DonutChart :percentage=store.dashboard_data.percentage_online_miners :text_inside="store.dashboard_data.online_miners + '/' + store.dashboard_data.total_amount_miners" />
           </div>
         </div>
@@ -78,9 +75,6 @@
       <div class="card">
           <h5 class="card-header">Total hash rate 5s [THS]</h5>
           <div class="card-body">
-<!--             <h5 class="card-title">$2.4k</h5>
-            <p class="card-text">Feb 1 - Apr 1, United States</p>
-            <p class="card-text text-success">4.6% increase since last month</p> -->
             <DonutChart :percentage=store.dashboard_data.percentage_total_hashr_5s :text_inside="round10(store.dashboard_data.total_hashr_5s/1000000, -1) + '/' + round10(store.dashboard_data.total_expected_hashrate_MHS/1000000, -1)" />
           </div>
         </div>
@@ -89,9 +83,6 @@
       <div class="card">
           <h5 class="card-header">Total hash rate 1m [THS]</h5>
           <div class="card-body">
-<!--             <h5 class="card-title">43</h5>
-            <p class="card-text">Feb 1 - Apr 1, United States</p>
-            <p class="card-text text-danger">2.6% decrease since last month</p> -->
             <DonutChart :percentage=store.dashboard_data.percentage_total_hasr_1m :text_inside="round10(store.dashboard_data.total_hasr_1m/1000000, -1) + '/' + round10(store.dashboard_data.total_expected_hashrate_MHS/1000000, -1)" />
           </div>
         </div>

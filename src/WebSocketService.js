@@ -182,8 +182,8 @@ export default {
                         item.Temperature = Temperature;
                         item.Env_Temp = Env_Temp;
                         temp_fan_threshold_alarms.push(item);
+                        miners_with_errors.push(miner_object.HostName);
                     }
-                    miners_with_errors.push(miner_object.HostName);
                 }
             });
             options.store.dashboard_data.total_amount_miners = options.store.miner_data.length;
