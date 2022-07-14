@@ -139,7 +139,7 @@ export default {
           return dateTime;
        }
 
-       //processess current data in options.store.miner_data and stores the condensed results ready for dashboard consumption in options.store.miner_data
+       //processess current data in options.store.miner_data and stores the condensed results ready for dashboard consumption in options.store.dashboard_data
        function process_data_for_dashboard(){
             options.store.dashboard_data.total_amount_miners = options.store.miner_data.length;
             let online_miners = 0;
@@ -147,6 +147,7 @@ export default {
             let hashrate_1m = 0;
             let miners_with_errors = [];
             let temp_fan_threshold_alarms = [];
+            let total_expected_hashrate_MHS = 0;
             //this part seems to be Whatsminer_M30S+ specific. We will have to put this to a more modular design to allow other miners to be addded as well
             options.store.miner_data.forEach((miner_object, index) => { 
                 //count online miners
@@ -158,6 +159,9 @@ export default {
                 //calc 1m hashrate in Megahash
                 if(miner_object.summary !==null )hashrate_1m += miner_object.summary.SUMMARY[0]["MHS 1m"];
 
+                //calc expected hashrate
+                if(miner_object.summary !==null )total_expected_hashrate_MHS += miner_object.expected_hashrate_MHS;
+                
                 //check if current miner has errors and store its IP in an array
                 if(miner_object.error_codes !==null ) {if(miner_object.error_codes.length>0)miners_with_errors.push(miner_object.HostName);};
 
@@ -170,14 +174,31 @@ export default {
                     let Env_Temp = miner_object.summary.SUMMARY[0]["Env Temp"];
                     if ( (Fan_Speed_In >= miner_object.Fan_Speed_In_threshold) || (Fan_Speed_In == 0) || (Fan_Speed_Out >= miner_object.Fan_Speed_Out_threshold) || (Fan_Speed_Out == 0) || (Temperature >= miner_object.Temperature_threshold) || (Env_Temp >= miner_object.Env_Temp_threshold)){
                         //create new item for the array
-                        let item = JSON.parse('{' + '"HostName": "' + HostName + '", "Fan_Speed_In": ' + Fan_Speed_In + ', "Fan_Speed_Out":' + Fan_Speed_Out + ', "Temperature":' + Temperature + ', "Env_Temp":' + Env_Temp + '}');
+                        let item = JSON.parse(
+                        {   "HostName": "",
+                            "Model": "",
+                            "Fan_Speed_In": 0, 
+                            "Fan_Speed_Out": 0,
+                            "Temperature": 0, 
+                            "Env_Temp": 0 });
+                        item.HostName = HostName;
+                        item.Model = miner_object.MinerModel;
+                        item.Fan_Speed_In = Fan_Speed_In;
+                        item.Fan_Speed_Out = Fan_Speed_Out;
+                        item.Temperature = Temperature;
+                        item.Env_Temp = Env_Temp;
                         temp_fan_threshold_alarms.push(item);
                     }
                     miners_with_errors.push(miner_object.HostName);
                 }
             });
+            options.store.dashboard_data.total_amount_miners = options.store.miner_data.length;
             options.store.dashboard_data.online_miners = online_miners;
+            options.store.dashboard_data.percentage_online_miners = Math.round(100*online_miners/options.store.miner_data.length);
             options.store.dashboard_data.total_hashr_5s = hashrate_5s;
+            options.store.dashboard_data.total_expected_hashrate_MHS = total_expected_hashrate_MHS;
+            options.store.dashboard_data.percentage_total_hashr_5s = Math.round( 100 * hashrate_5s / total_expected_hashrate_MHS);
+            options.store.dashboard_data.percentage_total_hasr_1m = Math.round(100 * hashrate_1m / total_expected_hashrate_MHS);
             options.store.dashboard_data.total_hashr_1m = hashrate_1m;
             if(miners_with_errors.length > 0) options.store.dashboard_data.miners_with_errors = miners_with_errors;
             if(temp_fan_threshold_alarms.lenght > 0) options.store.dashboard_data.temp_fan_threshold_alarms = temp_fan_threshold_alarms;

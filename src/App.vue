@@ -70,7 +70,7 @@
 <!--             <h5 class="card-title">345k</h5>
             <p class="card-text">Feb 1 - Apr 1, United States</p>
             <p class="card-text text-success">18.2% increase since last month</p> -->
-            <DonutChart percentage=50 text_inside="1 / 2" />
+            <DonutChart :percentage=store.dashboard_data.percentage_online_miners :text_inside="store.dashboard_data.online_miners + '/' + store.dashboard_data.total_amount_miners" />
           </div>
         </div>
   </div>
@@ -81,7 +81,7 @@
 <!--             <h5 class="card-title">$2.4k</h5>
             <p class="card-text">Feb 1 - Apr 1, United States</p>
             <p class="card-text text-success">4.6% increase since last month</p> -->
-            <DonutChart percentage=50 text_inside="104 / 208" />
+            <DonutChart :percentage=store.dashboard_data.percentage_total_hashr_5s :text_inside="store.dashboard_data.total_hashr_5s + '/' + store.dashboard_data.total_expected_hashrate_MHS" />
           </div>
         </div>
   </div>
@@ -92,7 +92,7 @@
 <!--             <h5 class="card-title">43</h5>
             <p class="card-text">Feb 1 - Apr 1, United States</p>
             <p class="card-text text-danger">2.6% decrease since last month</p> -->
-            <DonutChart percentage=50 text_inside="104 / 208" />
+            <DonutChart :percentage=store.dashboard_data.percentage_total_hasr_1m :text_inside="store.dashboard_data.total_hasr_1m + '/' + store.dashboard_data.total_expected_hashrate_MHS" />
           </div>
         </div>
   </div>
@@ -101,8 +101,7 @@
           <h5 class="card-header">Miners with errors</h5>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">192.168.178.40</li>
-              <li class="list-group-item">192.168.178.44</li>
+              <li v-for="item in store.dashboard_data.miners_with_errors" class="list-group-item"> {{ item }} </li>
             </ul>
           </div>
         </div>
@@ -119,8 +118,9 @@
                       <thead>
                         <tr>
                           <th scope="col">IP</th>
-                          <th scope="col">Type</th>
+                          <th scope="col">Model</th>
                           <th scope="col">Temp</th>
+                          <th scope="col">Env Temp</th>
                           <th scope="col">Fan-In</th>
                           <th scope="col">Fan-Out</th>
                           <th scope="col"></th>
@@ -128,20 +128,15 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <th scope="row">17371705</th>
-                          <td>Volt Premium Bootstrap 5 Dashboard</td>
-                          <td>johndoe@gmail.com</td>
-                          <td>€61.11</td>
-                          <td>Aug 31 2020</td>
-                          <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
-                        </tr>
-                        <tr>
-                          <th scope="row">17370540</th>
-                          <td>Pixel Pro Premium Bootstrap UI Kit</td>
-                          <td>jacob.monroe@company.com</td>
-                          <td>$153.11</td>
-                          <td>Aug 28 2020</td>
-                          <td><a href="#" class="btn btn-sm btn-primary">View</a></td>
+                          <div v-for="item in store.dashboard_data.temp_fan_threshold_alarms">
+                            <th scope="row"> {{ item.HostName }} </th>
+                            <td> {{ item.Model }} </td>
+                            <td> {{ item.Temperature }} </td>
+                            <td> {{ item.Env_Temp }} </td>
+                            <td> {{ item.Fan_Speed_In }} </td>
+                            <td> {{ item.Fan_Speed_Out }} </td>
+                            <td><a class="btn btn-sm btn-primary" @click=" changeTab(item.HostName); $refs.vueTabsref.$el.scrollIntoView();">View</a></td>
+                          </div>
                         </tr>
                       </tbody>
                   </table>
@@ -187,12 +182,12 @@
  
   <main>
 
-    <tabs v-if="store.miner_data !==null" cache-lifetime="10" :options="{ useUrlFragment: false }">
+    <tabs v-if="store.miner_data !==null" cache-lifetime="10" :options="{ useUrlFragment: false }" ref="vueTabsref">
       <div v-for="(object, key) in store.miner_data">
-        <tab v-if="object.isAlive" :name="object.HostName" prefix='<i class="bi bi-currency-bitcoin" title="online" style="font-size: 1rem; color: green;"></i>' >
+        <tab v-if="object.isAlive" :name="object.HostName" prefix='<i class="bi bi-currency-bitcoin" title="online" style="font-size: 1rem; color: green;"></i>' :id="object.HostName">
           <WhatsminerTable :tblIndex="key"/>
         </tab>
-        <tab v-else :name="object.HostName" prefix='<i class="bi bi-currency-bitcoin blink" title="offline" style="font-size: 1rem; color: red;"></i>' >
+        <tab v-else :name="object.HostName" prefix='<i class="bi bi-currency-bitcoin blink" title="offline" style="font-size: 1rem; color: red;"></i>' :id="object.HostName">
           <WhatsminerTable :tblIndex="key"/>
         </tab>
       </div>  
@@ -219,10 +214,12 @@
   import {store}  from '@/DataStore';
   import WhatsminerTable from '@/components/TableWhatsminer30S.vue';
   import DonutChart from '@/components/DonutChart.vue';
-  import LineChart from '@/components/LineEChart.vue'
+  import LineChart from '@/components/LineEChart.vue';
+  import { ref } from 'vue';
   //import connect_logo from '@/components/connect_logo.vue';
   //import tab_wrapper from '@/components/tab_wrapper.vue';
   const debug_flag = false;
+  const vueTabsref = ref(null);
 
   defineProps({
     msg: {
@@ -235,6 +232,11 @@
     }
   }); 
 
+
+  //func to programatically change tabs
+  const changeTab = (refId) => {
+    vueTabsref.value.selectTab("#" + refId);
+  }
 </script>
 <script>
 import {onBeforeMount} from 'vue';

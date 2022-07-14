@@ -8,9 +8,22 @@ export const store = reactive({
     dashboard_data: {
       total_amount_miners: 0,
       online_miners: 0,
+      percentage_online_miners: 0,
       total_hashr_5s: 0,
+      percentage_total_hashr_5s: 0,
       total_hasr_1m: 0,
-      miners_with_errors: null,
+      percentage_total_hasr_1m: 0,
+      total_expected_hashrate_MHS: 0,
+      /* array of IPs of type string */
+      miners_with_errors: null, 
+      /**array if JSON objects with the structure 
+       * {"HostName": HostName,
+       *  "Model": "",
+       *  "Fan_Speed_In": Fan_Speed_In, 
+       *  "Fan_Speed_Out": Fan_Speed_Out,
+       *  "Temperature": Temperature, 
+       *  "Env_Temp": Env_Temp }
+       */
       temp_fan_threshold_alarms: null
     },
     miner_data: null,
@@ -25,8 +38,8 @@ export const store = reactive({
             "MinerModel": "Whatsminer_M30S+",
             "Fan_Speed_In_threshold": 6000,
             "Fan_Speed_Out_threshold": 6000,
-            "Temperature-threshold": 80,
-            "Env-Temp-threshold": 38,
+            "Temperature_threshold": 80,
+            "Env_Temp_threshold": 38,
             "summary": {
                 "STATUS":[{"STATUS":"S","Msg":"Summary"}],
                 "SUMMARY":[

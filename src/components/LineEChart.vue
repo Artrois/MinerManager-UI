@@ -73,9 +73,9 @@ export default {
 </script>
 
 <style> 
-    @media (min-width: 1183) {
+     @media (min-width: 1183) {
         .chartBody {
-            width: 400px;
+            width: 600px;
             height: 300px;
         } 
     }
@@ -84,5 +84,5 @@ export default {
             width: 600px;
             height: 300px;
         } 
-    }
+    } 
 </style>
