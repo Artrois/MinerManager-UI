@@ -109,7 +109,7 @@
 </div>
 
 <div class="row my-5">
-  <div class="col-12 col-xl-8 mb-4 mb-lg-0">
+  <div class="col-12 col-xl-8 mb-4 mb-lg-0" style="width: 100%;">
       <div class="card">
           <h5 class="card-header">Temperature, Fan-out, Fan-in over threshold</h5>
           <div class="card-body">
@@ -145,7 +145,7 @@
         </div>
   </div>
 
-  <div class="col-12 col-xl-4" style="width: 500px;">
+  <div class="col-12 col-xl-4" style="width: 100%;">
     <div class="card">
         <h5 class="card-header">Hash rate history</h5>
         <div class="card-body">
