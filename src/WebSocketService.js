@@ -175,7 +175,7 @@ export default {
                     if ( (Fan_Speed_In >= miner_object.Fan_Speed_In_threshold) || (Fan_Speed_In == 0) || (Fan_Speed_Out >= miner_object.Fan_Speed_Out_threshold) || (Fan_Speed_Out == 0) || (Temperature >= miner_object.Temperature_threshold) || (Env_Temp >= miner_object.Env_Temp_threshold)){
                         //create new item for the array
                         let item = JSON.parse('{"HostName": "", "Model": "", "Fan_Speed_In": 0, "Fan_Speed_Out": 0, "Temperature": 0, "Env_Temp": 0 }');
-                        item.HostName = HostName;
+                        item.HostName = miner_object.HostName;
                         item.Model = miner_object.MinerModel;
                         item.Fan_Speed_In = Fan_Speed_In;
                         item.Fan_Speed_Out = Fan_Speed_Out;
