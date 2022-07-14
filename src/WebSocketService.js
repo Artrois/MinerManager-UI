@@ -101,7 +101,7 @@ export default {
             }
             catch(error){
                 options.store.backend_message = "invalid data";
-                console.log("WebSocketService.js::handleNotification(): " + error.message);
+                console.log("***error:WebSocketService.js::handleNotification(): " + error.message);
             }
             
             //from here we collect the data for the dashboard, the bindings to the graphs/diagrams will be done in vue
@@ -160,7 +160,7 @@ export default {
                 if(miner_object.summary !==null )hashrate_1m += miner_object.summary.SUMMARY[0]["MHS 1m"];
 
                 //calc expected hashrate
-                if(miner_object.summary !==null )total_expected_hashrate_MHS += miner_object.expected_hashrate_MHS;
+                total_expected_hashrate_MHS += miner_object.expected_hashrate_MHS;
                 
                 //check if current miner has errors and store its IP in an array
                 if(miner_object.error_codes !==null ) {if(miner_object.error_codes.length>0)miners_with_errors.push(miner_object.HostName);};
@@ -194,14 +194,23 @@ export default {
             });
             options.store.dashboard_data.total_amount_miners = options.store.miner_data.length;
             options.store.dashboard_data.online_miners = online_miners;
-            options.store.dashboard_data.percentage_online_miners = Math.round(100*online_miners/options.store.miner_data.length);
+            options.store.dashboard_data.percentage_online_miners = Math.round(100 * online_miners/options.store.miner_data.length);
             options.store.dashboard_data.total_hashr_5s = hashrate_5s;
+            if(total_expected_hashrate_MHS == 0){
+                //handle division by zero
+                console.log("WebSocketService::process_data_for_dashboard(): warning, total_expected_hashrate_MHS == 0");
+                total_expected_hashrate_MHS = 1;
+            }
             options.store.dashboard_data.total_expected_hashrate_MHS = total_expected_hashrate_MHS;
-            options.store.dashboard_data.percentage_total_hashr_5s = Math.round( 100 * hashrate_5s / total_expected_hashrate_MHS);
+            options.store.dashboard_data.percentage_total_hashr_5s = Math.round(100 * hashrate_5s / total_expected_hashrate_MHS);
             options.store.dashboard_data.percentage_total_hasr_1m = Math.round(100 * hashrate_1m / total_expected_hashrate_MHS);
             options.store.dashboard_data.total_hashr_1m = hashrate_1m;
             if(miners_with_errors.length > 0) options.store.dashboard_data.miners_with_errors = miners_with_errors;
             if(temp_fan_threshold_alarms.lenght > 0) options.store.dashboard_data.temp_fan_threshold_alarms = temp_fan_threshold_alarms;
+            if(options.store.debug_flag){
+                console.log("WebSocketService::process_data_for_dashboard(): print dashboard_data:");
+                console.log(JSON.stringify(options.store.dashboard_data), null, 2);
+            }
        }
 
     Vue.config.globalProperties.$webSocketsConnect();

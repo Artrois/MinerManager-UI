@@ -2,6 +2,7 @@ import {reactive} from 'vue';
 
 export const store = reactive({
     count: 0,
+    debug_flag: 1,
     backend_connected: false, 
     timestamp: "",
     backend_message: "",

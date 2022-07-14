@@ -76,23 +76,23 @@
   </div>
   <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
       <div class="card">
-          <h5 class="card-header">Total hash rate 5s [GHS]</h5>
+          <h5 class="card-header">Total hash rate 5s [THS]</h5>
           <div class="card-body">
 <!--             <h5 class="card-title">$2.4k</h5>
             <p class="card-text">Feb 1 - Apr 1, United States</p>
             <p class="card-text text-success">4.6% increase since last month</p> -->
-            <DonutChart :percentage=store.dashboard_data.percentage_total_hashr_5s :text_inside="store.dashboard_data.total_hashr_5s + '/' + store.dashboard_data.total_expected_hashrate_MHS" />
+            <DonutChart :percentage=store.dashboard_data.percentage_total_hashr_5s :text_inside="round10(store.dashboard_data.total_hashr_5s/1000000, -1) + '/' + round10(store.dashboard_data.total_expected_hashrate_MHS/1000000, -1)" />
           </div>
         </div>
   </div>
   <div class="col-12 col-md-6 mb-4 mb-lg-0 col-lg-3">
       <div class="card">
-          <h5 class="card-header">Total hash rate 1m [GHS]</h5>
+          <h5 class="card-header">Total hash rate 1m [THS]</h5>
           <div class="card-body">
 <!--             <h5 class="card-title">43</h5>
             <p class="card-text">Feb 1 - Apr 1, United States</p>
             <p class="card-text text-danger">2.6% decrease since last month</p> -->
-            <DonutChart :percentage=store.dashboard_data.percentage_total_hasr_1m :text_inside="store.dashboard_data.total_hasr_1m + '/' + store.dashboard_data.total_expected_hashrate_MHS" />
+            <DonutChart :percentage=store.dashboard_data.percentage_total_hasr_1m :text_inside="round10(store.dashboard_data.total_hasr_1m/1000000, -1) + '/' + round10(store.dashboard_data.total_expected_hashrate_MHS/1000000, -1)" />
           </div>
         </div>
   </div>
@@ -145,7 +145,7 @@
         </div>
   </div>
 
-  <div class="col-12 col-xl-4">
+  <div class="col-12 col-xl-4" style="width: 500px;">
     <div class="card">
         <h5 class="card-header">Hash rate history</h5>
         <div class="card-body">
@@ -218,7 +218,6 @@
   import { ref } from 'vue';
   //import connect_logo from '@/components/connect_logo.vue';
   //import tab_wrapper from '@/components/tab_wrapper.vue';
-  const debug_flag = false;
   const vueTabsref = ref(null);
 
   defineProps({
@@ -237,6 +236,42 @@
   const changeTab = (refId) => {
     vueTabsref.value.selectTab("#" + refId);
   }
+
+  /**
+ * Decimal adjustment of a number.
+ *
+ * @param {String}  type  The type of adjustment.
+ * @param {Number}  value The number.
+ * @param {Integer} exp   The exponent (the 10 logarithm of the adjustment base).
+ * @returns {Number} The adjusted value.
+ */
+  function decimalAdjust(type, value, exp) {
+    // If the exp is undefined or zero...
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math[type](value);
+    }
+    value = +value;
+    exp = +exp;
+    // If the value is not a number or the exp is not an integer...
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+    // Shift
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+    // Shift back
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+  }
+
+  // Decimal round
+  const round10 = (value, exp) => decimalAdjust('round', value, exp);
+  // Decimal floor
+  const floor10 = (value, exp) => decimalAdjust('floor', value, exp);
+  // Decimal ceil
+  const ceil10 = (value, exp) => decimalAdjust('ceil', value, exp);
+
+
 </script>
 <script>
 import {onBeforeMount} from 'vue';
