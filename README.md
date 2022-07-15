@@ -8,7 +8,7 @@ To test the UI build and run preview. Run
 node backend_websocket.js 
 node fake_miner.js.
 ```
-
+The view is responsive and can be viewed on mobiles as well. Tables with miner data will translate/transform from horizontal to vertical representation including thead.
 
 ## Recommended IDE Setup
 
@@ -40,4 +40,9 @@ npm run build
 ```sh
 npm run preview
 ```
+### Screens
+![image](https://user-images.githubusercontent.com/76772066/179247238-83a92501-d4fb-466d-9b85-1254e618cbbb.png)
+![image](https://user-images.githubusercontent.com/76772066/179247309-ece57d22-555e-4095-aa19-02e99a152b44.png)
+![image](https://user-images.githubusercontent.com/76772066/179247555-17f98d36-d90f-4371-9ee6-9d58c4e78191.png)
+![image](https://user-images.githubusercontent.com/76772066/179247631-bc5f315b-7407-49d4-a8c1-33b5860ac569.png)
 
