@@ -3,6 +3,12 @@
 This project is created with vue3 for SinglePage rendering, vite to bundle, bootstrap 5 for some icons and styles and JScript for WebSocket connection to the backend. There is another complementary project for the [backend](https://github.com/Artrois/MinerManager-Backend.git) in Node.js/Express.
 The backend is supposed to collect data from Whatsminer 30S (JSON formatted) and send it in regualr intervals via WebSocket to the front-end/UI. The UI in turn will render an overview dashboard showing most significant KPIs and it will also render tables with details for each miner. 
 The UI is modular and can be extended with custom vue components to accomodate support for other Miners. More tricky modifications will need to be applied to the backend to support other miners than Whatsminer 30S.
+To test the UI build and run preview. Run 
+```sh
+node backend_websocket.js 
+node fake_miner.js.
+```
+
 
 ## Recommended IDE Setup
 
