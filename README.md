@@ -46,3 +46,9 @@ npm run preview
 ![image](https://user-images.githubusercontent.com/76772066/179247555-17f98d36-d90f-4371-9ee6-9d58c4e78191.png)
 ![image](https://user-images.githubusercontent.com/76772066/179247631-bc5f315b-7407-49d4-a8c1-33b5860ac569.png)
 
+### ToDos
+-clean up the code
+-validate against real miners and harden the code for lung run
+-review for memory issues
+-add InnoDB connection for hashrate history
+-add link to miner events
