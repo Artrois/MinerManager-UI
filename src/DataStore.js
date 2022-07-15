@@ -16,7 +16,7 @@ export const store = reactive({
       percentage_total_hasr_1m: 0,
       total_expected_hashrate_MHS: 0,
       /* array of IPs of type string */
-      miners_with_errors: null, 
+      miners_with_errors: [], 
       /**array if JSON objects with the structure 
        * {"HostName": HostName,
        *  "Model": "",
@@ -25,7 +25,7 @@ export const store = reactive({
        *  "Temperature": Temperature, 
        *  "Env_Temp": Env_Temp }
        */
-      temp_fan_threshold_alarms: null
+      temp_fan_threshold_alarms: []
     },
     miner_data: null,
     miner_data_bak: JSON.parse(`[

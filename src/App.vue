@@ -48,6 +48,8 @@
         <button v-else @click="disconnect()" type="button" class="btn btn-outline-secondary" >
           <i title="disconnect from backend" class="bi bi-arrows-angle-expand" style="cursor: pointer;"></i>
         </button>
+        <button @click="send('hello')" type="button" class="btn btn-outline-secondary"  ><i title="send custom msg" class="bi bi-box-arrow-up-right" style="color: black; cursor: pointer; -webkit-text-stroke: 1px;"></i></button>
+        <button v-if="store.debug_flag" @click="store.backend_connected?store.backend_connected=false:store.backend_connected=true" type="button" class="btn btn-outline-secondary">Toggle connection: {{ store.backend_connected }}</button> 
       </div>
       <div class="p-2 bd-highlight">
         <span class="text-muted text-reset">
@@ -55,8 +57,7 @@
         </span>
       </div>
       <div class="ms-auto p-2 bd-highlight">
-        <button @click="send('hello')" type="button" class="btn btn-outline-secondary"  ><i title="send custom msg" class="bi bi-box-arrow-up-right" style="color: black; cursor: pointer; -webkit-text-stroke: 1px;"></i></button>
-        <button @click="store.backend_connected?store.backend_connected=false:store.backend_connected=true" type="button" class="btn btn-outline-secondary">Toggle connection: {{ store.backend_connected }}</button> 
+
       </div>
     </div>
   </div>
@@ -114,20 +115,20 @@
                           <th scope="col">Env Temp</th>
                           <th scope="col">Fan-In</th>
                           <th scope="col">Fan-Out</th>
-                          <th scope="col"></th>
+                          <th scope="col">Jump to Miner</th>
                         </tr>
                       </thead>
+
                       <tbody>
-                        <tr>
-                          <div v-for="item in store.dashboard_data.temp_fan_threshold_alarms">
+                        <tr v-for="item in store.dashboard_data.temp_fan_threshold_alarms">
                             <th scope="row"> {{ item.HostName }} </th>
                             <td> {{ item.Model }} </td>
                             <td> {{ item.Temperature }} </td>
                             <td> {{ item.Env_Temp }} </td>
                             <td> {{ item.Fan_Speed_In }} </td>
                             <td> {{ item.Fan_Speed_Out }} </td>
-                            <td><a class="btn btn-sm btn-primary" @click=" changeTab(item.HostName); $refs.vueTabsref.$el.scrollIntoView();">View</a></td>
-                          </div>
+                            <!-- <td><a class="btn btn-sm btn-primary" @click=" changeTab(item.HostName); $refs.vueTabsref.$el.scrollIntoView();">View</a></td> -->
+                            <td><a class="btn btn-outline-secondary" @click=" changeTab(item.HostName); $refs.vueTabsref.$el.scrollIntoView();">View</a></td>
                         </tr>
                       </tbody>
                   </table>
@@ -135,7 +136,8 @@
           </div>
         </div>
   </div>
-
+</div>
+<div class="row my-6">
   <div class="col-12 col-xl-4" style="width: 100%;">
     <div class="card">
         <h5 class="card-header">Hash rate history</h5>
@@ -143,7 +145,7 @@
             <LineChart />
         </div>
     </div>
-</div>
+  </div>
 </div>
 
    <!-- 

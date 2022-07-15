@@ -141,12 +141,15 @@ export default {
 
        //processess current data in options.store.miner_data and stores the condensed results ready for dashboard consumption in options.store.dashboard_data
        function process_data_for_dashboard(){
+            //reset entire dashboard => bad idea, need to change later
+            options.store.dashboard_data = JSON.parse('{"total_amount_miners": 0, "online_miners": 0, "percentage_online_miners": 0, "total_hashr_5s": 0, "percentage_total_hashr_5s": 0, "total_hasr_1m": 0, "percentage_total_hasr_1m": 0, "total_expected_hashrate_MHS": 0, "miners_with_errors": [], "temp_fan_threshold_alarms": [] }');
+
             options.store.dashboard_data.total_amount_miners = options.store.miner_data.length;
             let online_miners = 0;
             let hashrate_5s = 0;
             let hashrate_1m = 0;
-            let miners_with_errors = [];
-            let temp_fan_threshold_alarms = [];
+            //let miners_with_errors = [];
+            //let temp_fan_threshold_alarms = [];
             let total_expected_hashrate_MHS = 0;
             //this part seems to be Whatsminer_M30S+ specific. We will have to put this to a more modular design to allow other miners to be addded as well
             options.store.miner_data.forEach((miner_object, index) => { 
@@ -163,7 +166,7 @@ export default {
                 total_expected_hashrate_MHS += miner_object.expected_hashrate_MHS;
                 
                 //check if current miner has errors and store its IP in an array
-                if(miner_object.error_codes !==null ) {if(miner_object.error_codes.length>0)miners_with_errors.push(miner_object.HostName);};
+                if(miner_object.error_codes !==null ) {if(miner_object.error_codes.length>0)options.store.dashboard_data.miners_with_errors.push(miner_object.HostName);};
 
                 //check if temp and fan thresholds exceeded => miner specific
                 if(miner_object.summary !==null ) {
@@ -181,8 +184,8 @@ export default {
                         item.Fan_Speed_Out = Fan_Speed_Out;
                         item.Temperature = Temperature;
                         item.Env_Temp = Env_Temp;
-                        temp_fan_threshold_alarms.push(item);
-                        miners_with_errors.push(miner_object.HostName);
+                        options.store.dashboard_data.temp_fan_threshold_alarms.push(item);
+                        options.store.dashboard_data.miners_with_errors.push(miner_object.HostName);
                     }
                 }
             });
@@ -199,8 +202,8 @@ export default {
             options.store.dashboard_data.percentage_total_hashr_5s = Math.round(100 * hashrate_5s / total_expected_hashrate_MHS);
             options.store.dashboard_data.percentage_total_hasr_1m = Math.round(100 * hashrate_1m / total_expected_hashrate_MHS);
             options.store.dashboard_data.total_hashr_1m = hashrate_1m;
-            if(miners_with_errors.length > 0) options.store.dashboard_data.miners_with_errors = miners_with_errors;
-            if(temp_fan_threshold_alarms.lenght > 0) options.store.dashboard_data.temp_fan_threshold_alarms = temp_fan_threshold_alarms;
+            //options.store.dashboard_data.miners_with_errors = miners_with_errors;
+            //options.store.dashboard_data.temp_fan_threshold_alarms = temp_fan_threshold_alarms;
             if(options.store.debug_flag){
                 console.log("WebSocketService::process_data_for_dashboard(): print dashboard_data:");
                 console.log(JSON.stringify(options.store.dashboard_data), null, 2);
